@@ -1,0 +1,4 @@
+/* These are all required tailwind definitions */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
