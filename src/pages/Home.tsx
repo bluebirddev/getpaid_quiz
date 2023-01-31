@@ -1,60 +1,46 @@
-import React from 'react';
-import { FormEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useCreateTodo, useGetTodos } from '../api/endpoints';
-import Todos from '../components/Todos';
-import { useStore } from '../store/user';
+import { useNavigate } from 'react-router';
+import { QuestionManager } from '~/components/QuestionManager';
+import { QuizLayout } from '~/components/QuizLayout';
+import { questions } from '~/quiz';
+import { useQuizStore } from '~/store/quiz';
+import { useQuery } from '~/utils/navigation';
 
 const Home = () => {
-  const store = useStore();
-  const [todo, setTodo] = useState('');
-  const { user } = store;
-  const todos = useGetTodos({
-    query: {
-      enabled: !!user,
-    },
+  const query = useQuery();
+  const navigate = useNavigate();
+  const { answers } = useQuizStore();
+
+  const key = query.get('k');
+
+  const filteredQuestions = questions.filter((q) => {
+    if (!q.condition) return true;
+    return q.condition(answers);
   });
 
-  const createTodo = useCreateTodo({
-    mutation: {
-      onSuccess: () => {
-        todos.refetch();
-      },
-    },
-  });
+  let index = filteredQuestions.findIndex((q) => q.key === key);
+  if (index < 0) {
+    index = 0;
+  }
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const question = filteredQuestions[index];
 
-    if (!todo) return;
+  // const firstInvalidQuestionIndex = filteredQuestions.find((q) => {
+  //   if (!q.)
 
-    createTodo.mutateAsync({
-      data: {
-        description: todo,
-      },
-    });
-
-    setTodo('');
+  function onNext() {
+    const newIndex = index + 1;
+    navigate({ search: `?k=${filteredQuestions[newIndex].key}` });
+  }
+  function onPrev() {
+    const newIndex = index - 1;
+    console.log({ newIndex, filteredQuestions });
+    navigate({ search: `?k=${filteredQuestions[newIndex].key}` });
   }
 
   return (
-    <div>
-      {todos?.data && <Todos todos={todos.data} />}
-      <div className="border border-gray-200 p-2 mb-2 rounded w-64">
-        <h2>Create Todo:</h2>
-        <form onSubmit={onSubmit}>
-          <input value={todo} className="my-2" onChange={(event) => setTodo(event.target.value)} />
-          <button type="submit" className="btn">
-            Create
-          </button>
-        </form>
-      </div>
-      <div className="mt-10">
-        <Link to="/admin" className="underline">
-          Go to /admin
-        </Link>
-      </div>
-    </div>
+    <QuizLayout progress={index / filteredQuestions.length}>
+      <QuestionManager index={index} question={question} onNext={onNext} onPrev={onPrev} />
+    </QuizLayout>
   );
 };
 

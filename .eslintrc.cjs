@@ -23,9 +23,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
-    // 'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     'linebreak-style': 0,
-    // 'jsx/uses-react': 0,
     'react/react-in-jsx-scope': 0,
     'prettier/prettier': [
       'error',
@@ -36,17 +34,5 @@ module.exports = {
         tabWidth: 2,
       },
     ],
-    // '@typescript-eslint/explicit-module-boundary-types': 0,
   },
 };
-
-//
-// "extends": [
-//   "eslint:recommended",
-//   "plugin:react/recommended",
-//   "plugin:jsx-a11y/recommended",
-//   "plugin:@typescript-eslint/recommended",
-//   "plugin:import/typescript",
-//   "plugin:react/jsx-runtime",
-//   "plugin:prettier/recommended",
-//   "prettier"
