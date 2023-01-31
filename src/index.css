@@ -10,6 +10,6 @@ body {
 h2 {
   @apply font-bold text-[24px] leading-[29px] text-body;
 }
-a {
+h2 > a {
   @apply hover:underline;
 }

@@ -43,7 +43,7 @@ export function QuestionManager({
   onPrev,
 }: {
   index: number;
-  question: Question;
+  question: Question & { isValid: boolean };
   onNext?: React.MouseEventHandler<HTMLButtonElement>;
   onPrev?: React.MouseEventHandler<HTMLButtonElement>;
 }) {
@@ -54,7 +54,7 @@ export function QuestionManager({
     (props: ButtonsProps) => {
       const isValid = validation[question.type](question, answers[question.key]);
       return (
-        <div className="mt-auto md:mb-auto flex space-x-2 pb-3 pt-6">
+        <div className="mt-auto md:mb-auto flex space-x-2 py-6">
           <Button
             onClick={(e) => {
               if (props.onPrev) {
@@ -65,7 +65,7 @@ export function QuestionManager({
               }
             }}
             type="secondary"
-            disabled={props.disablePrev}
+            disabled={!onPrev || props.disablePrev}
           >
             Previous
           </Button>
@@ -79,7 +79,7 @@ export function QuestionManager({
               }
             }}
             type="primary"
-            disabled={!isValid || props.disableNext}
+            disabled={!onNext || !isValid || props.disableNext}
           >
             Next
           </Button>

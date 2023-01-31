@@ -1,18 +1,21 @@
 import classNames from 'classnames';
 import { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 
 export function Button({
   onClick,
   children,
   type = 'primary',
   disabled,
+  href,
 }: {
   children: ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'primary' | 'secondary';
   disabled?: boolean;
+  href?: string;
 }) {
-  return (
+  const content = (
     <button
       className={classNames(
         `
@@ -36,4 +39,6 @@ export function Button({
       {children}
     </button>
   );
+
+  return href ? <Link to={href}>{content}</Link> : content;
 }

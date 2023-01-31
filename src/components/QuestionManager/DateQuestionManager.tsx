@@ -1,5 +1,5 @@
 import { format, parse } from 'date-fns';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { DateQuestion } from '~/data/quiz';
 import { ensureNumberTyped, strictParseNumber } from '~/utils/number';
@@ -82,6 +82,11 @@ export function DateQuestionManager({
   const elM = React.useRef<HTMLInputElement>(null);
   const elY = React.useRef<HTMLInputElement>(null);
 
+  const validDateString = validDate ? format(validDate as Date, 'yyyy-MM-dd') : undefined;
+  useEffect(() => {
+    setAnswer(validDateString);
+  }, [validDateString]);
+
   return (
     <>
       <div
@@ -121,12 +126,7 @@ export function DateQuestionManager({
         />
       </div>
       <div>
-        <Buttons
-          onNext={() => {
-            setAnswer(format(validDate as Date, 'yyyy-MM-dd') || '');
-          }}
-          disableNext={!isValid}
-        />
+        <Buttons disableNext={!isValid} />
       </div>
     </>
   );
