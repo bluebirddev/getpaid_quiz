@@ -6,11 +6,22 @@ export function SelectQuestionManager({
   question,
   answer,
   setAnswer,
+  // onNext,
   Buttons,
 }: QuestionManagerProps<SelectQuestion>) {
   return (
     <>
-      <Select options={question.options} value={answer} onChange={setAnswer} type="select" />
+      <Select
+        options={question.options}
+        value={answer}
+        onChange={(a) => {
+          setAnswer(a);
+          // if (onNext) {
+          //   onNext();
+          // }
+        }}
+        type="select"
+      />
       <Buttons disableNext={question.required && !answer} />
     </>
   );

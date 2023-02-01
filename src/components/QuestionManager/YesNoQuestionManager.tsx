@@ -7,10 +7,24 @@ export function YesNoQuestionManager({
   setAnswer,
   Buttons,
   question,
-}: QuestionManagerProps<YesNoQuestion>) {
+}: // onNext,
+QuestionManagerProps<YesNoQuestion>) {
   return (
     <>
-      <Select value={answer} onChange={setAnswer} type="yes-no" />
+      <Select
+        options={[
+          { value: true, label: 'Yes' },
+          { value: false, label: 'No' },
+        ]}
+        value={answer}
+        onChange={(a) => {
+          setAnswer(a);
+          // if (onNext) {
+          //   onNext();
+          // }
+        }}
+        type="yes-no"
+      />
       <Buttons disableNext={question.required && answer === undefined} />
     </>
   );

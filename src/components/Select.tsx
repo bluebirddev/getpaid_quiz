@@ -9,14 +9,12 @@ type MultiSelect = {
 };
 type YesNo = {
   type: 'yes-no';
+  options: { value: boolean; label: string }[];
 };
 type SelectProps = { value: any; onChange: (value: any) => void } & (Select | MultiSelect | YesNo);
 
 export function Select(props: SelectProps) {
-  const options = ((props as any).options || [
-    { value: true, label: 'Yes' },
-    { value: false, label: 'No' },
-  ]) as { value: any; label: string }[];
+  const options = props.options;
 
   const answers = Array.isArray(props.value) ? (props.value as string[]) : [];
   const answer = props.value;
@@ -25,7 +23,7 @@ export function Select(props: SelectProps) {
     <ol className="mt-1 flex-col flex space-y-3">
       {options.map((q) => {
         const isSelected =
-          props.type === 'multi-select' ? answers.includes(q.value) : answer === q.value;
+          props.type === 'multi-select' ? answers.includes(q.value as string) : answer === q.value;
 
         const onClick = () => {
           if (props.type === 'multi-select') {
@@ -41,7 +39,7 @@ export function Select(props: SelectProps) {
 
         return (
           <li
-            key={props.type == 'yes-no' ? (q.value ? '1' : '0') : q.value}
+            key={props.type == 'yes-no' ? (q.value ? '1' : '0') : (q.value as string)}
             className={`
               cursor-pointer ring-[#D0D5DD] text-[14px] px-4 font-medium leading-[20px] flex items-center h-[56px] rounded border
               focus-within:ring-2

@@ -18,11 +18,12 @@ export type QuestionManagerProps<T = Question> = {
   answer: any;
   setAnswer: (answer: any) => void;
   Buttons: (props: ButtonsProps) => JSX.Element;
+  onNext?: () => void;
 };
 
 type ButtonsProps = {
-  onNext?: React.MouseEventHandler<HTMLButtonElement>;
-  onPrev?: React.MouseEventHandler<HTMLButtonElement>;
+  onNext?: () => void;
+  onPrev?: () => void;
   disableNext?: boolean;
   disablePrev?: boolean;
 };
@@ -44,8 +45,8 @@ export function QuestionManager({
 }: {
   index: number;
   question: Question & { isValid: boolean };
-  onNext?: React.MouseEventHandler<HTMLButtonElement>;
-  onPrev?: React.MouseEventHandler<HTMLButtonElement>;
+  onNext?: () => void;
+  onPrev?: () => void;
 }) {
   const { answers, setAnswer } = useQuizStore();
 
@@ -56,12 +57,12 @@ export function QuestionManager({
       return (
         <div className="mt-[60px] md:mt-6 flex space-x-2 justify-between">
           <Button
-            onClick={(e) => {
+            onClick={() => {
               if (props.onPrev) {
-                props.onPrev(e);
+                props.onPrev();
               }
               if (onPrev) {
-                onPrev(e);
+                onPrev();
               }
             }}
             type="secondary"
@@ -70,12 +71,12 @@ export function QuestionManager({
             Previous
           </Button>
           <Button
-            onClick={(e) => {
+            onClick={() => {
               if (props.onNext) {
-                props.onNext(e);
+                props.onNext();
               }
               if (onNext) {
-                onNext(e);
+                onNext();
               }
             }}
             desktopWider
@@ -101,6 +102,7 @@ export function QuestionManager({
         <TextQuestionManager
           question={question}
           answer={answer}
+          onNext={onNext}
           setAnswer={(answer) => setAnswer(question.key, answer)}
           Buttons={Buttons}
         />
@@ -111,6 +113,7 @@ export function QuestionManager({
         <DateQuestionManager
           question={question}
           answer={answer}
+          onNext={onNext}
           setAnswer={(answer) => setAnswer(question.key, answer)}
           Buttons={Buttons}
         />
@@ -121,6 +124,7 @@ export function QuestionManager({
         <TelQuestionManager
           question={question}
           answer={answer || ''}
+          onNext={onNext}
           setAnswer={(answer) => setAnswer(question.key, answer)}
           Buttons={Buttons}
         />
@@ -131,6 +135,7 @@ export function QuestionManager({
         <SelectQuestionManager
           question={question}
           answer={answer}
+          onNext={onNext}
           setAnswer={(answer) => setAnswer(question.key, answer)}
           Buttons={Buttons}
         />
@@ -141,6 +146,7 @@ export function QuestionManager({
         <MultiSelectQuestionManager
           question={question}
           answer={answer}
+          onNext={onNext}
           setAnswer={(answer) => setAnswer(question.key, answer)}
           Buttons={Buttons}
         />
@@ -151,6 +157,7 @@ export function QuestionManager({
         <YesNoQuestionManager
           question={question}
           answer={answer}
+          onNext={onNext}
           setAnswer={(answer) => setAnswer(question.key, answer)}
           Buttons={Buttons}
         />
@@ -161,6 +168,7 @@ export function QuestionManager({
         <AgreeDisagreeQuestionManager
           question={question}
           answer={answer}
+          onNext={onNext}
           setAnswer={(answer) => setAnswer(question.key, answer)}
           Buttons={Buttons}
         />
@@ -171,6 +179,7 @@ export function QuestionManager({
         <EmailQuestionManager
           question={question}
           answer={answer || ''}
+          onNext={onNext}
           setAnswer={(answer) => setAnswer(question.key, answer)}
           Buttons={Buttons}
         />
