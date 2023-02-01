@@ -14,7 +14,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { validation } from './validation';
 
 export type QuestionManagerProps<T = Question> = {
-  question: T;
+  question: T & { isValid: boolean };
   answer: any;
   setAnswer: (answer: any) => void;
   Buttons: (props: ButtonsProps) => JSX.Element;
@@ -54,7 +54,7 @@ export function QuestionManager({
     (props: ButtonsProps) => {
       const isValid = validation[question.type](question, answers[question.key]);
       return (
-        <div className="mt-auto md:mb-auto flex space-x-2 py-6">
+        <div className="mt-[60px] md:mt-6 flex space-x-2 justify-between">
           <Button
             onClick={(e) => {
               if (props.onPrev) {
@@ -78,6 +78,7 @@ export function QuestionManager({
                 onNext(e);
               }
             }}
+            desktopWider
             type="primary"
             disabled={!onNext || !isValid || props.disableNext}
           >
@@ -179,7 +180,7 @@ export function QuestionManager({
   })();
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col">
       <h2 className="mb-6">{question.label}</h2>
       {content}
       {/* <div className="mt-auto md:mt-32 flex space-x-2">

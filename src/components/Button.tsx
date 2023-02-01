@@ -8,28 +8,41 @@ export function Button({
   type = 'primary',
   disabled,
   href,
+  size = 'medium',
+  desktopWider,
 }: {
   children: ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'primary' | 'secondary';
   disabled?: boolean;
   href?: string;
+  size?: 'medium' | 'large';
+  desktopWider?: boolean;
 }) {
   const content = (
     <button
       className={classNames(
         `
-        font-medium border rounded-lg h-12 flex items-center
+        font-medium border rounded-lg flex items-center
         justify-center w-full 
         
         focus:ring-2 focus:outline-none ring-[#D0D5DD]
       `,
         {
-          [`focus:ring-[#D0D5DD] drop-shadow-[0_1px_2px_rgba(16,24,40,0.05)]
-        hover:bg-[#F9FAFB] border-[#D0D5DD] bg-white`]: type === 'secondary' && !disabled,
-          [`focus:ring-[#DC5B08] drop-shadow-[0_1px_2px_rgba(16,24,40,0.05)]
-      hover:bg-[#EC6B18] border-[#FC7B28] bg-[#FC7B28] text-white`]:
-            type === 'primary' && !disabled,
+          'h-[36px] md:h-12 text-sm w-[109px]': size === 'medium',
+          'md:w-[191px]': size === 'medium' && desktopWider,
+          'md:w-[117px]': size === 'medium' && !desktopWider,
+          'h-12 text-base': size === 'large',
+          [`
+          drop-shadow-[0_1px_2px_rgba(16,24,40,0.05)] border-[#D0D5DD] bg-white
+        focus:ring-[#D0D5DD]
+        hover:bg-[#F9F9F9]
+          `]: type === 'secondary' && !disabled,
+          [`
+          drop-shadow-[0_1px_2px_rgba(16,24,40,0.05)] text-white border-[#FC7B28] bg-[#FC7B28]
+        focus:ring-[#D0D5DD]
+        hover:bg-[#E05E0A] hover:border-[#C65207]
+          `]: type === 'primary' && !disabled,
           ['border-[#FC7B2899] bg-[#FC7B2899] text-white']: type === 'primary' && disabled,
         }
       )}

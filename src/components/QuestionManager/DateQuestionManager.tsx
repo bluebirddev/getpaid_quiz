@@ -87,13 +87,17 @@ export function DateQuestionManager({
     setAnswer(validDateString);
   }, [validDateString]);
 
+  const showError = validDate && (!question.isValid || !isValid);
+
   return (
     <>
       <div
         onClick={() => {
           elD.current?.focus();
         }}
-        className="px-[16px] h-[52px] flex space-x-2 border items-center rounded border-[#D9D9D9] focus-within:border-[#344054] overflow-hidden"
+        className={`px-[16px] h-[52px] flex space-x-2 border items-center rounded overflow-hidden
+        ${!showError ? 'border-[#D9D9D9] focus-within:border-[#344054]' : 'border-[#FF4D4F]'}
+        `}
       >
         <input
           ref={elD}

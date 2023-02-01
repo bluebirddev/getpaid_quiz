@@ -8,12 +8,14 @@ export function Input({
   onChange,
   label,
   placeholder,
+  error,
 }: {
   type: string;
   value: string;
   onChange: (value: string) => void;
   label?: string;
   placeholder?: string;
+  error?: boolean;
 }) {
   const [isFocused, setIsFocused] = useState(true);
   const [innerValue, setInnerValue] = useState('');
@@ -84,9 +86,9 @@ export function Input({
           placeholder={placeholder}
           autoFocus
           type={type}
-          className={`${
-            preIcon ? 'pl-[48px] pr-[18px]' : 'px-[18px]'
-          } outline-none border border-[#D9D9D9] rounded w-full focus:border-[#344054] h-[52px]`}
+          className={`${preIcon ? 'pl-[48px] pr-[18px]' : 'px-[18px]'} ${
+            error ? 'border-[#F04438]' : 'border-[#D9D9D9] focus:border-[#344054]'
+          } outline-none border rounded w-full h-[52px]`}
         />
       </div>
     </div>

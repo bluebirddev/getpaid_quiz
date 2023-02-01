@@ -2,21 +2,24 @@ import { TextQuestion } from '~/data/quiz';
 import { QuestionManagerProps } from '.';
 import { Input } from '../Input';
 
-export function TextQuestionManager(props: QuestionManagerProps<TextQuestion>) {
-  const answer = props.answer || '';
-  const setAnswer = (answer: string) => props.setAnswer(answer);
-
-  const isInvalid = props.question.validate && !!props.question.validate(answer);
+export function TextQuestionManager({
+  answer,
+  question,
+  setAnswer,
+  Buttons,
+}: QuestionManagerProps<TextQuestion>) {
+  const isInvalid = (question.validate && !!question.validate(answer)) || question.isValid;
 
   return (
     <>
       <Input
         type="text"
-        value={answer}
-        label={props.question.placeholder}
+        value={answer || ''}
+        label={question.placeholder}
         onChange={(e) => setAnswer(e)}
+        error={answer && !isInvalid}
       />
-      {props.Buttons && <props.Buttons disableNext={isInvalid} />}
+      {Buttons && <Buttons disableNext={!isInvalid} />}
     </>
   );
 }
