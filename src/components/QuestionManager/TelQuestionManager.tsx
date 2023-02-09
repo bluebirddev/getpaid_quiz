@@ -7,6 +7,7 @@ export function TelQuestionManager({
   setAnswer,
   Buttons,
   question,
+  active,
 }: QuestionManagerProps<TelQuestion>) {
   const disableNext = (() => {
     if (!question.required && !answer) return false;
@@ -20,6 +21,7 @@ export function TelQuestionManager({
         type="tel"
         placeholder={question.placeholder}
         value={answer}
+        active={active}
         onChange={(e) => setAnswer(e)}
       />
       <Buttons disableNext={disableNext} />

@@ -32,7 +32,6 @@ export function Input({
   useEffect(() => {
     if (active) {
       setTimeout(() => {
-        console.log(value);
         setIsFocused(true);
         ref.current?.focus();
       }, 0);
@@ -99,7 +98,7 @@ export function Input({
           onChange={onChangeMiddleware}
           placeholder={placeholder}
           autoFocus
-          type={type}
+          type={type === 'email' ? 'search' : type}
           className={`${preIcon ? 'pl-[48px] pr-[18px]' : 'px-[18px]'} ${
             error ? 'border-[#F04438]' : 'border-[#D9D9D9] focus:border-[#344054]'
           } outline-none border rounded w-full h-[52px]`}

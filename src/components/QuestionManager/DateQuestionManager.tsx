@@ -10,6 +10,7 @@ export function DateQuestionManager({
   answer,
   setAnswer,
   Buttons,
+  active,
 }: QuestionManagerProps<DateQuestion>) {
   let existingDate: Date | undefined = new Date(answer || '');
   if (isNaN(existingDate.getTime())) {
@@ -46,6 +47,14 @@ export function DateQuestionManager({
     if (isNaN(parsedDate.getTime())) return undefined;
     return parsedDate;
   })();
+
+  useEffect(() => {
+    if (active) {
+      setTimeout(() => {
+        elD.current?.focus();
+      }, 0);
+    }
+  }, [active]);
 
   const isValid = (() => {
     const validationErrorText = question.validate && question.validate(validDate);

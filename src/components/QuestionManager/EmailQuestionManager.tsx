@@ -8,6 +8,7 @@ export function EmailQuestionManager({
   answer,
   setAnswer,
   question,
+  active,
 }: QuestionManagerProps<EmailQuestion>) {
   const disableNext = (() => {
     if (!question.required && !answer) return false;
@@ -20,6 +21,7 @@ export function EmailQuestionManager({
       <Input
         type="email"
         value={answer}
+        active={active}
         label={question.placeholder}
         onChange={(e) => setAnswer(e)}
       />

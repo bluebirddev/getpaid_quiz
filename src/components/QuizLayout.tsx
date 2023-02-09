@@ -19,7 +19,7 @@ export function QuizLayout({ children, progress }: { children: ReactNode; progre
         </div>
       </header>
       {/* full width handler */}
-      <div className={`flex flex-1 overflow-y-hidden bg-[#F1F5FB] justify-center`}>{children}</div>
+      <div className={`flex flex-1 bg-[#F1F5FB] justify-center min-h-0 `}>{children}</div>
     </div>
   );
 }

@@ -1,11 +1,5 @@
 import { useNavigate } from 'react-router';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/virtual';
-
 import { QuestionManager } from '~/components/QuestionManager';
 import { validation } from '~/components/QuestionManager/validation';
 import { QuizLayout } from '~/components/QuizLayout';
@@ -13,6 +7,7 @@ import { ThankYou } from '~/components/ThankYou';
 import { questions } from '~/quiz';
 import { useQuizStore } from '~/store/quiz';
 import { useQuery } from '~/utils/navigation';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 
 export const QuizPage = () => {
   const query = useQuery();
@@ -64,28 +59,62 @@ export const QuizPage = () => {
 
   return (
     <QuizLayout progress={index / filteredQuestions.length}>
-      <Swiper
-        slidesPerView={1}
-        allowTouchMove={false}
-        initialSlide={index}
-        direction="vertical"
-        className="mySwiper"
-        autoHeight
-      >
-        {mappedQuestions.map((q, i) => (
-          <SwiperSlide key={q.key} virtualIndex={i}>
-            <QuestionManager
-              index={i}
-              activeIndex={index}
-              question={mappedQuestions[i]}
-              onNext={() => onNext()}
-              onPrev={() => onPrev()}
-            />
-          </SwiperSlide>
+      <Swipy
+        index={index}
+        pages={mappedQuestions.map((q, i) => (
+          <QuestionManager
+            key={i}
+            index={i}
+            activeIndex={index}
+            question={mappedQuestions[i]}
+            onNext={() => onNext()}
+            onPrev={() => onPrev()}
+          />
         ))}
-      </Swiper>
-      {/*  */}
-      {/* </div> */}
+      />
     </QuizLayout>
   );
 };
+
+function Swipy({ pages, index }: { pages: ReactNode[]; index: number }) {
+  const [stopAnimating, setStopAnimating] = useState(true);
+  const [height, setHeight] = useState<number | undefined>(undefined);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setHeight(ref.current?.clientHeight);
+    setTimeout(() => {
+      setStopAnimating(false);
+    }, 100);
+  }, []);
+
+  useEffect(() => {
+    function handleResize() {
+      setStopAnimating(true);
+      setHeight(ref.current?.clientHeight);
+      setTimeout(() => {
+        setStopAnimating(false);
+      }, 0);
+    }
+
+    window.addEventListener('resize', handleResize);
+  });
+
+  return (
+    // container to get constant full height
+    <div className="h-full w-full" ref={ref}>
+      {/* inner container with same height that moves viewport */}
+      <div
+        className={`h-full ${stopAnimating ? 'transition-none' : 'transition-all'}`}
+        style={{ marginTop: -index * (height || 0) }}
+      >
+        {pages.map((p, i) => (
+          // each page with same height again
+          <div className="h-full overflow-y-auto flex justify-center" key={i}>
+            {stopAnimating ? null : p}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

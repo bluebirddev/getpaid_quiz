@@ -10,10 +10,8 @@ import { YesNoQuestionManager } from './YesNoQuestionManager';
 import { AgreeDisagreeQuestionManager } from './AgreeDisagreeQuestionManager';
 import { EmailQuestionManager } from './EmailQuestionManager';
 import { Button } from '../Button';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { validation } from './validation';
-import { useSwiper } from 'swiper/react';
-import { bool } from 'yup';
 
 export type QuestionManagerProps<T = Question> = {
   question: T & { isValid: boolean };
@@ -30,15 +28,6 @@ type ButtonsProps = {
   disableNext?: boolean;
   disablePrev?: boolean;
 };
-function useFlashNull(key: string | number) {
-  const [flashNull, setFlashNull] = useState(false);
-  useEffect(() => {
-    setFlashNull(true);
-    const timeout = setTimeout(() => setFlashNull(false), 0);
-    return () => clearTimeout(timeout);
-  }, [key]);
-  return flashNull;
-}
 
 export function QuestionManager({
   index,
@@ -54,9 +43,7 @@ export function QuestionManager({
   onPrev?: () => boolean;
 }) {
   const { answers, setAnswer } = useQuizStore();
-  const swiper = useSwiper();
   const active = activeIndex === index;
-  const flashNull = useFlashNull(activeIndex);
 
   const Buttons = useCallback(
     // eslint-disable-next-line react/display-name
@@ -70,9 +57,7 @@ export function QuestionManager({
                 props.onPrev();
               }
               if (onPrev) {
-                if (onPrev()) {
-                  swiper.slideTo(index - 1);
-                }
+                onPrev();
               }
             }}
             type="secondary"
@@ -88,8 +73,6 @@ export function QuestionManager({
               if (onNext) {
                 onNext();
               }
-              console.log('index', index);
-              swiper.slideTo(index + 1);
             }}
             wider
             type="primary"
@@ -123,6 +106,7 @@ export function QuestionManager({
     if (question.type === 'date') {
       return (
         <DateQuestionManager
+          active={active}
           question={question}
           answer={answer}
           onNext={onNext}
@@ -134,6 +118,7 @@ export function QuestionManager({
     if (question.type === 'tel') {
       return (
         <TelQuestionManager
+          active={active}
           question={question}
           answer={answer || ''}
           onNext={onNext}
@@ -145,6 +130,7 @@ export function QuestionManager({
     if (question.type === 'select') {
       return (
         <SelectQuestionManager
+          active={active}
           question={question}
           answer={answer}
           onNext={onNext}
@@ -156,6 +142,7 @@ export function QuestionManager({
     if (question.type === 'multi-select') {
       return (
         <MultiSelectQuestionManager
+          active={active}
           question={question}
           answer={answer}
           onNext={onNext}
@@ -167,6 +154,7 @@ export function QuestionManager({
     if (question.type === 'yes-no') {
       return (
         <YesNoQuestionManager
+          active={active}
           question={question}
           answer={answer}
           onNext={onNext}
@@ -178,6 +166,7 @@ export function QuestionManager({
     if (question.type === 'agree-disagree') {
       return (
         <AgreeDisagreeQuestionManager
+          active={active}
           question={question}
           answer={answer}
           onNext={onNext}
@@ -189,6 +178,7 @@ export function QuestionManager({
     if (question.type === 'email') {
       return (
         <EmailQuestionManager
+          active={active}
           question={question}
           answer={answer || ''}
           onNext={onNext}
