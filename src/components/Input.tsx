@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import sa from '~/assets/sa';
 import { isInt } from '~/utils/number';
 
@@ -9,6 +9,7 @@ export function Input({
   label,
   placeholder,
   error,
+  active,
 }: {
   type: string;
   value: string;
@@ -16,15 +17,27 @@ export function Input({
   label?: string;
   placeholder?: string;
   error?: boolean;
+  active?: boolean;
 }) {
   const [isFocused, setIsFocused] = useState(true);
   const [innerValue, setInnerValue] = useState('');
+  const ref = useRef<HTMLInputElement>(null);
 
   const isRaised = isFocused || value;
 
   const preIcon = type === 'tel' ? sa : undefined;
 
   const realValue = value === undefined ? innerValue : value;
+
+  useEffect(() => {
+    if (active) {
+      setTimeout(() => {
+        console.log(value);
+        setIsFocused(true);
+        ref.current?.focus();
+      }, 0);
+    }
+  }, [active]);
 
   function onChangeMiddleware(e: ChangeEvent<HTMLInputElement>) {
     const newValue: string = (() => {
@@ -82,6 +95,7 @@ export function Input({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           value={getDisplayValue(realValue)}
+          ref={ref}
           onChange={onChangeMiddleware}
           placeholder={placeholder}
           autoFocus

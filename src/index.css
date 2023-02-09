@@ -13,3 +13,13 @@ h2 {
 h2 > a {
   @apply hover:underline;
 }
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+}

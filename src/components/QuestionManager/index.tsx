@@ -12,6 +12,8 @@ import { EmailQuestionManager } from './EmailQuestionManager';
 import { Button } from '../Button';
 import { useCallback, useEffect, useState } from 'react';
 import { validation } from './validation';
+import { useSwiper } from 'swiper/react';
+import { bool } from 'yup';
 
 export type QuestionManagerProps<T = Question> = {
   question: T & { isValid: boolean };
@@ -19,6 +21,7 @@ export type QuestionManagerProps<T = Question> = {
   setAnswer: (answer: any) => void;
   Buttons: (props: ButtonsProps) => JSX.Element;
   onNext?: () => void;
+  active?: boolean;
 };
 
 type ButtonsProps = {
@@ -27,8 +30,7 @@ type ButtonsProps = {
   disableNext?: boolean;
   disablePrev?: boolean;
 };
-
-function useFlashNull(key: string) {
+function useFlashNull(key: string | number) {
   const [flashNull, setFlashNull] = useState(false);
   useEffect(() => {
     setFlashNull(true);
@@ -39,16 +41,22 @@ function useFlashNull(key: string) {
 }
 
 export function QuestionManager({
+  index,
   question,
   onNext,
+  activeIndex,
   onPrev,
 }: {
   index: number;
+  activeIndex: number;
   question: Question & { isValid: boolean };
-  onNext?: () => void;
-  onPrev?: () => void;
+  onNext?: () => boolean;
+  onPrev?: () => boolean;
 }) {
   const { answers, setAnswer } = useQuizStore();
+  const swiper = useSwiper();
+  const active = activeIndex === index;
+  const flashNull = useFlashNull(activeIndex);
 
   const Buttons = useCallback(
     // eslint-disable-next-line react/display-name
@@ -62,7 +70,9 @@ export function QuestionManager({
                 props.onPrev();
               }
               if (onPrev) {
-                onPrev();
+                if (onPrev()) {
+                  swiper.slideTo(index - 1);
+                }
               }
             }}
             type="secondary"
@@ -78,6 +88,8 @@ export function QuestionManager({
               if (onNext) {
                 onNext();
               }
+              console.log('index', index);
+              swiper.slideTo(index + 1);
             }}
             wider
             type="primary"
@@ -96,10 +108,10 @@ export function QuestionManager({
   // const flashNull = useFlashNull(question.key);
 
   const content = (() => {
-    // if (flashNull) return null;
     if (question.type === 'text') {
       return (
         <TextQuestionManager
+          active={active}
           question={question}
           answer={answer}
           onNext={onNext}
@@ -189,13 +201,16 @@ export function QuestionManager({
   })();
 
   return (
-    <div className="flex flex-col">
-      <h2>{question.label}</h2>
-      {question.description && (
-        <p className="mt-2.5 text-body text-sm leading-[19px]">{question.description}</p>
-      )}
-      <div className="mt-6">{content}</div>
-      {/* <div className="mt-auto md:mt-32 flex space-x-2">
+    // white outer container
+    <div className="max-w-[1186px] w-full bg-white shadow-[0_0_16px_rgba(0,0,0,0.08)] mx-[15px] h-fit min-h-full flex justify-center">
+      <div className="mx-[14px] my-[36px] max-w-[440px] w-full h-fit relative">
+        <div className="flex flex-col">
+          <h2>{question.label}</h2>
+          {question.description && (
+            <p className="mt-2.5 text-body text-sm leading-[19px]">{question.description}</p>
+          )}
+          <div className="mt-6">{content}</div>
+          {/* <div className="mt-auto md:mt-32 flex space-x-2">
         <Button onClick={onPrev} type="secondary">
           Previous
         </Button>
@@ -203,6 +218,8 @@ export function QuestionManager({
           Next
         </Button>
       </div> */}
+        </div>
+      </div>
     </div>
   );
 
