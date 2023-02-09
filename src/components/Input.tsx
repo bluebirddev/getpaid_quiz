@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import sa from '~/assets/sa';
 import { isInt } from '~/utils/number';
 
@@ -97,7 +98,7 @@ export function Input({
           ref={ref}
           onChange={onChangeMiddleware}
           placeholder={placeholder}
-          autoFocus
+          autoFocus={!isMobile}
           type={type === 'email' ? 'search' : type}
           className={`${preIcon ? 'pl-[48px] pr-[18px]' : 'px-[18px]'} ${
             error ? 'border-[#F04438]' : 'border-[#D9D9D9] focus:border-[#344054]'
