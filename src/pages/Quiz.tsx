@@ -76,6 +76,8 @@ export const QuizPage = () => {
   );
 };
 
+const TRANSITION_DURATION = 300;
+
 function Swipy({ pages, index }: { pages: ReactNode[]; index: number }) {
   const [stopAnimating, setStopAnimating] = useState(true);
   const [height, setHeight] = useState<number | undefined>(undefined);
@@ -85,7 +87,7 @@ function Swipy({ pages, index }: { pages: ReactNode[]; index: number }) {
     setHeight(ref.current?.clientHeight);
     setTimeout(() => {
       setStopAnimating(false);
-    }, 100);
+    }, TRANSITION_DURATION);
   }, []);
 
   useEffect(() => {
@@ -94,7 +96,7 @@ function Swipy({ pages, index }: { pages: ReactNode[]; index: number }) {
       setHeight(ref.current?.clientHeight);
       setTimeout(() => {
         setStopAnimating(false);
-      }, 0);
+      }, TRANSITION_DURATION);
     }
 
     window.addEventListener('resize', handleResize);
@@ -106,12 +108,15 @@ function Swipy({ pages, index }: { pages: ReactNode[]; index: number }) {
       {/* inner container with same height that moves viewport */}
       <div
         className={`h-full ${stopAnimating ? 'transition-none' : 'transition-all'}`}
-        style={{ marginTop: -index * (height || 0) }}
+        style={{
+          marginTop: -index * (height || 0),
+          transitionDuration: `${TRANSITION_DURATION}ms`,
+        }}
       >
         {pages.map((p, i) => (
           // each page with same height again
           <div className="h-full overflow-y-auto flex justify-center" key={i}>
-            {stopAnimating ? null : p}
+            {p}
           </div>
         ))}
       </div>
