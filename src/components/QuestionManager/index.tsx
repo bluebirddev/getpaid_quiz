@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Question } from '~/data/quiz';
+import { isMobile } from 'react-device-detect';
+
 import { useQuizStore } from '~/store/quiz';
 import { TextQuestionManager } from './TextQuestionManager';
 import { DateQuestionManager } from './DateQuestionManager';
@@ -43,7 +45,7 @@ export function QuestionManager({
   onPrev?: () => boolean;
 }) {
   const { answers, setAnswer } = useQuizStore();
-  const active = activeIndex === index;
+  const active = !isMobile && activeIndex === index;
 
   const Buttons = useCallback(
     // eslint-disable-next-line react/display-name
