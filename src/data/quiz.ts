@@ -7,6 +7,7 @@ export type BaseQuestion = {
   required?: boolean;
   condition?: (answers: { [key: string]: any }) => boolean;
   validate?: (value: any) => string | undefined;
+  description?: string | ReactNode;
 };
 
 export type TextQuestion = BaseQuestion & {
@@ -40,6 +41,8 @@ export type YesNoQuestion = BaseQuestion & {
 
 export type AgreeDisagreeQuestion = BaseQuestion & {
   type: 'agree-disagree';
+  agreeText?: string;
+  disagreeText?: string;
 };
 
 export type EmailQuestion = BaseQuestion & {

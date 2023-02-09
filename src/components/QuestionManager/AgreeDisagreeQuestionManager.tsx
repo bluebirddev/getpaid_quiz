@@ -14,8 +14,8 @@ QuestionManagerProps<AgreeDisagreeQuestion>) {
     <>
       <Select
         options={[
-          { value: true, label: 'Yes, I understand and agree' },
-          { value: false, label: 'No, I don’t understand and disagree' },
+          { value: true, label: question.agreeText || 'Yes, I understand and agree' },
+          { value: false, label: question.disagreeText || 'No, I don’t understand and disagree' },
         ]}
         value={answer}
         onChange={(a) => {

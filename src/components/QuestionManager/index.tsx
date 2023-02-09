@@ -55,7 +55,7 @@ export function QuestionManager({
     (props: ButtonsProps) => {
       const isValid = validation[question.type](question, answers[question.key]);
       return (
-        <div className="mt-[60px] md:mt-6 flex space-x-2 justify-between">
+        <div className="mt-[60px] flex space-x-2 justify-between">
           <Button
             onClick={() => {
               if (props.onPrev) {
@@ -79,7 +79,7 @@ export function QuestionManager({
                 onNext();
               }
             }}
-            desktopWider
+            wider
             type="primary"
             disabled={!onNext || !isValid || props.disableNext}
           >
@@ -93,10 +93,10 @@ export function QuestionManager({
 
   const answer = answers[question.key];
 
-  const flashNull = useFlashNull(question.key);
+  // const flashNull = useFlashNull(question.key);
 
   const content = (() => {
-    if (flashNull) return null;
+    // if (flashNull) return null;
     if (question.type === 'text') {
       return (
         <TextQuestionManager
@@ -190,8 +190,11 @@ export function QuestionManager({
 
   return (
     <div className="flex flex-col">
-      <h2 className="mb-6">{question.label}</h2>
-      {content}
+      <h2>{question.label}</h2>
+      {question.description && (
+        <p className="mt-2.5 text-body text-sm leading-[19px]">{question.description}</p>
+      )}
+      <div className="mt-6">{content}</div>
       {/* <div className="mt-auto md:mt-32 flex space-x-2">
         <Button onClick={onPrev} type="secondary">
           Previous

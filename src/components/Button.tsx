@@ -9,7 +9,7 @@ export function Button({
   disabled,
   href,
   size = 'medium',
-  desktopWider,
+  wider,
 }: {
   children: ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -17,7 +17,7 @@ export function Button({
   disabled?: boolean;
   href?: string;
   size?: 'medium' | 'large';
-  desktopWider?: boolean;
+  wider?: boolean;
 }) {
   const content = (
     <button
@@ -29,9 +29,9 @@ export function Button({
         focus:ring-2 focus:outline-none ring-[#D0D5DD]
       `,
         {
-          'h-[36px] md:h-12 text-sm w-[109px]': size === 'medium',
-          'md:w-[191px]': size === 'medium' && desktopWider,
-          'md:w-[117px]': size === 'medium' && !desktopWider,
+          'h-[36px] md:h-12 text-sm': size === 'medium',
+          'w-[130px] md:w-[191px]': size === 'medium' && wider,
+          'w-[109px] md:w-[117px]': size === 'medium' && !wider,
           'h-12 text-base': size === 'large',
           [`
           drop-shadow-[0_1px_2px_rgba(16,24,40,0.05)] border-[#D0D5DD] bg-white

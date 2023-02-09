@@ -33,6 +33,8 @@ export const questions: Question[] = [
     required: true,
     type: 'tel',
     placeholder: '074 685 4684',
+    description:
+      'You can only get paid if you answer a sales call on this number. Please ensure it is accurate.',
   },
   {
     key: 'gender',
@@ -56,6 +58,7 @@ export const questions: Question[] = [
     label: 'What products would you be interested',
     required: true,
     type: 'multi-select',
+    description: 'The more you select, the greater your opportunity to get paid.',
     options: [
       {
         value: 'funeral_cover',
@@ -113,11 +116,13 @@ export const questions: Question[] = [
     label:
       "Can we call you about Life Insurance offers? (You'll get paid if you get a quote, of course)",
     required: true,
+    description: "You'll get paid if you get a quote, of course.",
     type: 'yes-no',
   },
   {
     key: 'email',
-    label: 'Enter your email address',
+    label: 'Do you have an email address?',
+    description: 'If you have an email address, enter it below, otherwise you can skip this step.',
     type: 'email',
     placeholder: 'Email address',
   },
@@ -197,6 +202,7 @@ export const questions: Question[] = [
     key: 'dependants',
     label: 'Do you have any financial dependants?',
     required: true,
+    description: 'Choose as many as you like.',
     type: 'multi-select',
     options: [
       {
@@ -364,6 +370,7 @@ export const questions: Question[] = [
   {
     key: 'monthly_income',
     label: 'How much do you earn every month?',
+    description: '(Before taxes or deductions)',
     condition(answers) {
       const employmentStatus = answers['employment_status'];
       return !employmentStatus || employmentStatus !== 'unemployed';
@@ -400,6 +407,7 @@ export const questions: Question[] = [
   {
     key: 'why_unemployed',
     label: 'Please select the most accurate description of your unemployment?',
+    description: '(Before taxes or deductions)',
     required: true,
     condition(answers) {
       const employmentStatus = answers['employment_status'];
@@ -436,6 +444,7 @@ export const questions: Question[] = [
   {
     key: 'household_income',
     label: 'What is your household income?',
+    description: '(Before taxes or deductions)',
     required: true,
     type: 'select',
     condition(answers) {
@@ -638,7 +647,8 @@ export const questions: Question[] = [
   },
   {
     key: 'personal_info_consent',
-    label: (
+    label: 'Consent',
+    description: (
       <>
         I provide consent to have my personal information collected, processed, and possibly shared
         with third parties who may contact me based on my profile with the hope to make a sale. The
@@ -649,15 +659,19 @@ export const questions: Question[] = [
         <a href="https://get-paid.co.za/privacy-cookie-policy/" target="_blank" rel="noreferrer">
           see here
         </a>
+        .
       </>
     ),
     type: 'agree-disagree',
     validate: (value) => (!value ? 'You must agree to the terms to continue' : undefined),
     required: true,
+    agreeText: 'I agree',
+    disagreeText: 'I disagree',
   },
   {
     key: 'marketing_consent',
-    label: (
+    label: 'No obligation',
+    description: (
       <>
         I understand that I am under no obligation to buy any product, or take up any service when
         I’m contacted by a third-party marketer
@@ -666,6 +680,8 @@ export const questions: Question[] = [
     type: 'agree-disagree',
     validate: (value) => (!value ? 'You must agree to the terms to continue' : undefined),
     required: true,
+    agreeText: 'Yes, I understand and agree',
+    disagreeText: 'No, I don’t understand and disagree',
   },
   {
     key: 'anything_else',

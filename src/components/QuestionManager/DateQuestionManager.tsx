@@ -59,6 +59,10 @@ export function DateQuestionManager({
     if (d !== undefined) {
       setDayText(d);
     }
+    const num = d && Number.parseInt(d);
+    if (num && num > 3) {
+      elM.current?.focus();
+    }
     if (d?.length === 2) {
       elM.current?.focus();
     }
@@ -67,6 +71,10 @@ export function DateQuestionManager({
     const m = ensureNumberTyped(text, 12);
     if (m !== undefined) {
       setMonthText(m);
+    }
+    const num = m && Number.parseInt(m);
+    if (num && num > 1) {
+      elY.current?.focus();
     }
     if (m?.length === 2) {
       elY.current?.focus();
@@ -104,7 +112,7 @@ export function DateQuestionManager({
           onClick={(e) => e.stopPropagation()}
           type="text"
           value={dayText}
-          className="min-w-0 px-1 w-[36px] border-b border-b-transparent border-t-transparent focus:border-b-[#344054] focus:outline-none"
+          className="min-w-0 px-1 w-[40px] border-b border-b-transparent border-t-transparent focus:border-b-[#344054] focus:outline-none"
           onChange={(e) => onDayChange(e.target.value)}
           placeholder="DD"
         />
@@ -114,7 +122,7 @@ export function DateQuestionManager({
           onClick={(e) => e.stopPropagation()}
           type="text"
           value={monthText}
-          className="min-w-0 px-1 w-[36px] border-b border-b-transparent border-t-transparent focus:border-b-[#344054] focus:outline-none"
+          className="min-w-0 px-1 w-[40px] border-b border-b-transparent border-t-transparent focus:border-b-[#344054] focus:outline-none"
           onChange={(e) => onMonthChange(e.target.value)}
           placeholder="MM"
         />
