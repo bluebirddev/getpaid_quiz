@@ -178,7 +178,7 @@ export function ThankYou() {
           />
         </svg>
       </div>
-      <div className="mt-[54px] text-center relative bg-white h-[182px]">
+      <div className="mt-[54px] text-center relative bg-white h-[184px]">
         <div className="absolute inset-0">
           <svg
             width="284"
@@ -301,10 +301,13 @@ export function ThankYou() {
             </defs>
           </svg>
         </div>
-        <div className="bg-white absolute inset-0 mt-4 flex items-center">
+        <div className="bg-white absolute inset-0 mt-3 flex items-center none">
           <div>
             <h2>Thank you! </h2>
-            <p className="mt-[7px]">We will SMS you if you{"'"}ve been selected for a call.</p>
+            <p className="mt-[7px]">We have sent you a verification email.</p>{' '}
+            <p className="mt-[12px]">
+              As soon as you are selected for a campaign, we will SMS you.
+            </p>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { differenceInYears } from 'date-fns';
+import { validateIdNumber } from '~/utils/validate_sa_id';
 import { Question } from '../data/quiz';
 
 export const questions: Question[] = [
@@ -17,14 +17,14 @@ export const questions: Question[] = [
     type: 'text',
   },
   {
-    key: 'date_of_birth',
-    label: 'What is your date of birth?',
+    key: 'id_number',
+    label: 'What is your ID Number',
     required: true,
-    type: 'date',
-    validate(date) {
-      if (!date) return 'Please enter a valid date';
-      const years = differenceInYears(new Date(), date);
-      if (years < 18) return 'You must be 18 years or older to use this service';
+    type: 'text',
+    validate(idNumber) {
+      if (!idNumber) return 'Please enter a valid ID Number';
+      const validate = validateIdNumber(idNumber);
+      if (!validate) return 'Please enter a valid ID Number';
     },
   },
   {
@@ -37,6 +37,12 @@ export const questions: Question[] = [
       'You can only get paid if you answer a sales call on this number. Please ensure it is accurate.',
   },
   {
+    key: 'email',
+    label: 'What is your email address?',
+    type: 'email',
+    placeholder: 'Email address',
+  },
+  {
     key: 'gender',
     label: 'What is your gender?',
     required: true,
@@ -46,12 +52,6 @@ export const questions: Question[] = [
       { value: 'female', label: 'Female' },
       { value: 'other', label: 'Other' },
     ],
-  },
-  {
-    key: 'sa_citizen',
-    label: 'Are you a South African citizen or legal resident?',
-    required: true,
-    type: 'yes-no',
   },
   {
     key: 'products',
@@ -118,13 +118,6 @@ export const questions: Question[] = [
     required: true,
     description: "You'll get paid if you get a quote, of course.",
     type: 'yes-no',
-  },
-  {
-    key: 'email',
-    label: 'Do you have an email address?',
-    description: 'If you have an email address, enter it below, otherwise you can skip this step.',
-    type: 'email',
-    placeholder: 'Email address',
   },
   {
     key: 'province',

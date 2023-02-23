@@ -9,7 +9,7 @@ export function TextQuestionManager({
   Buttons,
   active,
 }: QuestionManagerProps<TextQuestion>) {
-  const isInvalid = (question.validate && !!question.validate(answer)) || question.isValid;
+  const isInvalid = (question.validate && !!question.validate(answer)) || !question.isValid;
 
   return (
     <>
@@ -19,9 +19,8 @@ export function TextQuestionManager({
         active={active}
         label={question.placeholder}
         onChange={(e) => setAnswer(e)}
-        error={answer && !isInvalid}
       />
-      {Buttons && <Buttons disableNext={!isInvalid} />}
+      {Buttons && <Buttons disableNext={isInvalid} />}
     </>
   );
 }
