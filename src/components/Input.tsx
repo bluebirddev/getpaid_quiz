@@ -17,7 +17,7 @@ export function Input({
   onChange: (value: string) => void;
   label?: string;
   placeholder?: string;
-  error?: boolean;
+  error?: boolean | string;
   active?: boolean;
 }) {
   const [isFocused, setIsFocused] = useState(true);
@@ -104,6 +104,9 @@ export function Input({
             error ? 'border-[#F04438]' : 'border-[#D9D9D9] focus:border-[#344054]'
           } outline-none border rounded w-full h-[52px]`}
         />
+        {error && typeof error === 'string' && (
+          <div className="absolute bottom-[-25px] text-sm text-[#F04438]">{error}</div>
+        )}
       </div>
     </div>
   );

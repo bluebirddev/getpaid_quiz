@@ -19,12 +19,13 @@ export const questions: Question[] = [
   {
     key: 'id_number',
     label: 'What is your ID Number',
+    description: 'Please provide a valid South African ID number',
     required: true,
     type: 'text',
     validate(idNumber) {
-      if (!idNumber) return 'Please enter a valid ID Number';
+      if (!idNumber) return 'You must provide a valid ID number';
       const validate = validateIdNumber(idNumber);
-      if (!validate) return 'Please enter a valid ID Number';
+      if (!validate) return 'You must provide a valid ID number';
     },
   },
   {

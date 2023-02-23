@@ -25,8 +25,8 @@ export type QuestionManagerProps<T = Question> = {
 };
 
 type ButtonsProps = {
-  onNext?: () => void;
-  onPrev?: () => void;
+  onNext?: () => boolean;
+  onPrev?: () => boolean;
   disableNext?: boolean;
   disablePrev?: boolean;
 };
@@ -70,7 +70,8 @@ export function QuestionManager({
           <Button
             onClick={() => {
               if (props.onNext) {
-                props.onNext();
+                const success = props.onNext();
+                if (success === false) return;
               }
               if (onNext) {
                 onNext();

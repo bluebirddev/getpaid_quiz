@@ -13,8 +13,10 @@ export function validateIdNumber(id: string) {
   if (isNaN(parsedDate.getTime())) return false;
   const c = id[10];
   if (c !== '0' && c !== '1') return false;
-  return luhnCheck(id);
+  // return luhnCheck(id);
+  return true;
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const luhnCheck = (num: string) => {
   const arr = (num + '')
     .split('')
@@ -23,5 +25,6 @@ const luhnCheck = (num: string) => {
   const lastDigit = arr.splice(0, 1)[0];
   let sum = arr.reduce((acc, val, i) => (i % 2 !== 0 ? acc + val : acc + ((val * 2) % 9) || 9), 0);
   sum += lastDigit;
+  console.log({ sum, lastDigit });
   return sum % 10 === 0;
 };

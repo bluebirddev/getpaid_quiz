@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { TextQuestion } from '~/data/quiz';
 import { QuestionManagerProps } from '.';
 import { Input } from '../Input';
@@ -9,7 +10,18 @@ export function TextQuestionManager({
   Buttons,
   active,
 }: QuestionManagerProps<TextQuestion>) {
-  const isInvalid = (question.validate && !!question.validate(answer)) || !question.isValid;
+  const validate = question.validate && question.validate(answer);
+  const isInvalid = !!validate || !question.isValid;
+
+  const [softEnable, setSoftEnable] = useState(true);
+
+  function onNext() {
+    if (isInvalid) {
+      setSoftEnable(false);
+      return false;
+    }
+    return true;
+  }
 
   return (
     <>
@@ -19,8 +31,9 @@ export function TextQuestionManager({
         active={active}
         label={question.placeholder}
         onChange={(e) => setAnswer(e)}
+        error={!softEnable && (validate || isInvalid)}
       />
-      {Buttons && <Buttons disableNext={isInvalid} />}
+      {Buttons && <Buttons onNext={onNext} disableNext={!softEnable && isInvalid} />}
     </>
   );
 }
