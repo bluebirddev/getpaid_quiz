@@ -1,4 +1,4 @@
-import { EmailQuestion } from '~/data/quiz';
+import { EmailQuestion } from '~/quiz/types';
 import { isEmail } from '~/utils/email';
 import { QuestionManagerProps } from '.';
 import { Input } from '../Input';

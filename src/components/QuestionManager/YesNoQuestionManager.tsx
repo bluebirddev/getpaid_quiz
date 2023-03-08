@@ -1,4 +1,4 @@
-import { YesNoQuestion } from '~/data/quiz';
+import { YesNoQuestion } from '~/quiz/types';
 import { QuestionManagerProps } from '.';
 import { Select } from '../Select';
 

@@ -23,3 +23,26 @@ h2 > a {
   justify-content: center;
   overflow-y: auto;
 }
+
+/* Background */
+.loader {
+  width: 100px;
+  height: 100px;
+}
+.loader path {
+  fill: #FC7B28;
+  transform-origin: center;
+  animation: rotate 1.5s linear infinite;
+}
+.loaderreverse {
+  animation-direction: reverse !important;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+  from {
+    transform: rotate(0deg);
+  }
+}

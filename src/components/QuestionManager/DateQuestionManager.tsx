@@ -1,7 +1,7 @@
 import { format, parse } from 'date-fns';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { DateQuestion } from '~/data/quiz';
+import { DateQuestion } from '~/quiz/types';
 import { ensureNumberTyped, strictParseNumber } from '~/utils/number';
 import { QuestionManagerProps } from '.';
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Question } from '~/data/quiz';
+import { Question } from '~/quiz/types';
 import { isEmail } from '~/utils/email';
 
 /**

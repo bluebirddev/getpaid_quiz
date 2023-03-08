@@ -1,4 +1,4 @@
-import { MultiSelectQuestion } from '~/data/quiz';
+import { MultiSelectQuestion } from '~/quiz/types';
 import { QuestionManagerProps } from '.';
 import { Select } from '../Select';
 

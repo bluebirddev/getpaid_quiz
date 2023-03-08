@@ -1,4 +1,4 @@
-import { AgreeDisagreeQuestion } from '~/data/quiz';
+import { AgreeDisagreeQuestion } from '~/quiz/types';
 import { QuestionManagerProps } from '.';
 import { Select } from '../Select';
 

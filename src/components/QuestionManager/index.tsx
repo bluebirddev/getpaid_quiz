@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Question } from '~/data/quiz';
+import { isTelQuestion, Question } from '~/quiz/types';
 import { isMobile } from 'react-device-detect';
 
 import { useQuizStore } from '~/store/quiz';
@@ -12,8 +12,10 @@ import { YesNoQuestionManager } from './YesNoQuestionManager';
 import { AgreeDisagreeQuestionManager } from './AgreeDisagreeQuestionManager';
 import { EmailQuestionManager } from './EmailQuestionManager';
 import { Button } from '../Button';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { validation } from './validation';
+import { PageLoader } from '../PageLoader';
+import { TelError } from '../TelError';
 
 export type QuestionManagerProps<T = Question> = {
   question: T & { isValid: boolean };
@@ -47,6 +49,11 @@ export function QuestionManager({
   const { answers, setAnswer } = useQuizStore();
   const active = !isMobile && activeIndex === index;
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const pageValidate = isTelQuestion(question) ? question.pageValidate : undefined;
+
   const Buttons = useCallback(
     // eslint-disable-next-line react/display-name
     (props: ButtonsProps) => {
@@ -68,10 +75,19 @@ export function QuestionManager({
             Previous
           </Button>
           <Button
-            onClick={() => {
+            onClick={async () => {
               if (props.onNext) {
                 const success = props.onNext();
                 if (success === false) return;
+              }
+              if (pageValidate) {
+                setLoading(true);
+                const isValid = await pageValidate.validate(answers[question.key]);
+                setLoading(false);
+                if (!isValid) {
+                  setError(true);
+                  return;
+                }
               }
               if (onNext) {
                 onNext();
@@ -86,7 +102,7 @@ export function QuestionManager({
         </div>
       );
     },
-    [onNext, onPrev]
+    [onNext, onPrev, pageValidate]
   );
 
   const answer = answers[question.key];
@@ -198,39 +214,23 @@ export function QuestionManager({
     <div className="max-w-[1186px] w-full bg-white shadow-[0_0_16px_rgba(0,0,0,0.08)] mx-[15px] h-fit min-h-full flex justify-center">
       <div className="mx-[14px] my-[36px] max-w-[440px] w-full h-fit relative">
         <div className="flex flex-col">
-          <h2>{question.label}</h2>
-          {question.description && (
-            <p className="mt-2.5 text-body text-sm leading-[19px]">{question.description}</p>
+          {loading ? (
+            <PageLoader>{pageValidate?.loadingText}</PageLoader>
+          ) : (
+            (error && pageValidate && (
+              <pageValidate.ErrorComponent onBack={() => setError(false)} />
+            )) || (
+              <>
+                <h2>{question.label}</h2>
+                {question.description && (
+                  <p className="mt-2.5 text-body text-sm leading-[19px]">{question.description}</p>
+                )}
+                <div className="mt-6">{content}</div>
+              </>
+            )
           )}
-          <div className="mt-6">{content}</div>
-          {/* <div className="mt-auto md:mt-32 flex space-x-2">
-        <Button onClick={onPrev} type="secondary">
-          Previous
-        </Button>
-        <Button onClick={onNext} type="primary" disabled={isNextDisabled}>
-          Next
-        </Button>
-      </div> */}
         </div>
       </div>
     </div>
   );
-
-  // return (
-  //   <div className="flex flex-col items-center mt-20">
-  //     <div className="max-w-full w-[400px] flex">
-  //       <div className="text-xl mr-2">{index}</div>
-  //       {content}
-  //     </div>
-  //     {/* <br />
-  //     <div>
-  //       <button onClick={onPrev} className="bg-orange-400 p-2 rounded">
-  //         Prev
-  //       </button>
-  //       <button onClick={onNext} className="bg-orange-400 p-2 rounded">
-  //         Next
-  //       </button>
-  //     </div> */}
-  //   </div>
-  // );
 }

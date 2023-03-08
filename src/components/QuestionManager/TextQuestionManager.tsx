@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextQuestion } from '~/data/quiz';
+import { TextQuestion } from '~/quiz/types';
 import { QuestionManagerProps } from '.';
 import { Input } from '../Input';
 

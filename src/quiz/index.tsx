@@ -1,5 +1,6 @@
+import { TelError } from '~/components/TelError';
 import { validateIdNumber } from '~/utils/validate_sa_id';
-import { Question } from '../data/quiz';
+import { Question } from './types';
 
 export const questions: Question[] = [
   {
@@ -36,6 +37,14 @@ export const questions: Question[] = [
     placeholder: '074 685 4684',
     description:
       'You can only get paid if you answer a sales call on this number. Please ensure it is accurate.',
+    pageValidate: {
+      loadingText: 'Checking number',
+      ErrorComponent: TelError,
+      validate: async (tel) => {
+        await wait(4000);
+        return false;
+      },
+    },
   },
   {
     key: 'email',
@@ -683,3 +692,6 @@ export const questions: Question[] = [
     type: 'text',
   },
 ];
+function wait(n: number) {
+  return new Promise((resolve) => setTimeout(resolve, n));
+}

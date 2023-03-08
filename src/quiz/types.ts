@@ -23,7 +23,15 @@ export type DateQuestion = BaseQuestion & {
 export type TelQuestion = BaseQuestion & {
   type: 'tel';
   placeholder?: string;
+  pageValidate?: {
+    loadingText: string;
+    ErrorComponent: (props: { onBack?: () => void }) => JSX.Element;
+    validate: (tel: string) => Promise<boolean>;
+  };
 };
+export function isTelQuestion(question: Question): question is TelQuestion {
+  return question.type === 'tel';
+}
 
 export type SelectQuestion = BaseQuestion & {
   type: 'select';
