@@ -25,12 +25,15 @@ export type TelQuestion = BaseQuestion & {
   placeholder?: string;
   pageValidate?: {
     loadingText: string;
-    ErrorComponent: (props: { onBack?: () => void }) => JSX.Element;
+    ErrorComponent: (props: { onBack: () => void }) => JSX.Element;
     validate: (tel: string) => Promise<boolean>;
   };
 };
 export function isTelQuestion(question: Question): question is TelQuestion {
   return question.type === 'tel';
+}
+export function isEmailQuestion(question: Question): question is EmailQuestion {
+  return question.type === 'email';
 }
 
 export type SelectQuestion = BaseQuestion & {
@@ -56,6 +59,11 @@ export type AgreeDisagreeQuestion = BaseQuestion & {
 export type EmailQuestion = BaseQuestion & {
   type: 'email';
   placeholder?: string;
+  pageValidate?: {
+    loadingText: string;
+    ErrorComponent: (props: { onBack: () => void }) => JSX.Element;
+    validate: (tel: string) => Promise<boolean>;
+  };
 };
 
 export type Question =

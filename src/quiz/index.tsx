@@ -1,6 +1,8 @@
 import { TelError } from '~/components/TelError';
 import { validateIdNumber } from '~/utils/validate_sa_id';
 import { Question } from './types';
+import { isTelAvailable, sendVerificationEmail } from '~/api';
+import { EmailError } from '~/components/EmailError';
 
 export const questions: Question[] = [
   {
@@ -41,8 +43,7 @@ export const questions: Question[] = [
       loadingText: 'Checking number',
       ErrorComponent: TelError,
       validate: async (tel) => {
-        await wait(4000);
-        return false;
+        return await isTelAvailable(tel);
       },
     },
   },
@@ -51,6 +52,13 @@ export const questions: Question[] = [
     label: 'What is your email address?',
     type: 'email',
     placeholder: 'Email address',
+    pageValidate: {
+      loadingText: 'Checking email',
+      ErrorComponent: EmailError,
+      validate: async (email) => {
+        return await sendVerificationEmail(email);
+      },
+    },
   },
   {
     key: 'gender',
@@ -692,6 +700,3 @@ export const questions: Question[] = [
     type: 'text',
   },
 ];
-function wait(n: number) {
-  return new Promise((resolve) => setTimeout(resolve, n));
-}

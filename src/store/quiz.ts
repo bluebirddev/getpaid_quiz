@@ -4,6 +4,7 @@ import { create } from 'zustand';
 type StoreState = {
   answers: Record<string, any>;
   setAnswer: (key: string, answer: any) => void;
+  clearAnswers: () => void;
 };
 
 function getFromLocalStorage() {
@@ -26,6 +27,13 @@ export const useQuizStore = create<StoreState>((set) => ({
   setAnswer: (key, answer) => {
     return set((r) => {
       const answers = { ...r.answers, [key]: answer };
+      saveToLocalStorage(answers);
+      return { answers };
+    });
+  },
+  clearAnswers: () => {
+    return set(() => {
+      const answers = {};
       saveToLocalStorage(answers);
       return { answers };
     });

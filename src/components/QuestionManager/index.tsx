@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isTelQuestion, Question } from '~/quiz/types';
+import { isEmailQuestion, isTelQuestion, Question } from '~/quiz/types';
 import { isMobile } from 'react-device-detect';
 
 import { useQuizStore } from '~/store/quiz';
@@ -12,10 +12,9 @@ import { YesNoQuestionManager } from './YesNoQuestionManager';
 import { AgreeDisagreeQuestionManager } from './AgreeDisagreeQuestionManager';
 import { EmailQuestionManager } from './EmailQuestionManager';
 import { Button } from '../Button';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { validation } from './validation';
 import { PageLoader } from '../PageLoader';
-import { TelError } from '../TelError';
 
 export type QuestionManagerProps<T = Question> = {
   question: T & { isValid: boolean };
@@ -52,47 +51,62 @@ export function QuestionManager({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const pageValidate = isTelQuestion(question) ? question.pageValidate : undefined;
+  const pageValidate =
+    isTelQuestion(question) || isEmailQuestion(question) ? question.pageValidate : undefined;
 
   const Buttons = useCallback(
     // eslint-disable-next-line react/display-name
     (props: ButtonsProps) => {
+      function onKeyboard(e: KeyboardEvent) {
+        if (active) {
+          if (e.key === 'Enter') {
+            onNextClick();
+          }
+        }
+      }
+      async function onBackClick() {
+        if (props.onPrev) {
+          props.onPrev();
+        }
+        if (onPrev) {
+          onPrev();
+        }
+      }
+
+      async function onNextClick() {
+        if (props.onNext) {
+          const success = props.onNext();
+          if (success === false) return;
+        }
+        if (pageValidate) {
+          setLoading(true);
+          const isValid = await pageValidate.validate(answers[question.key]);
+          setLoading(false);
+          if (!isValid) {
+            setError(true);
+            return;
+          }
+        }
+        if (onNext) {
+          onNext();
+        }
+      }
+
+      useEffect(() => {
+        window.addEventListener('keyup', onKeyboard);
+        return () => {
+          window.removeEventListener('keyup', onKeyboard);
+        };
+      }, []);
+
       const isValid = validation[question.type](question, answers[question.key]);
       return (
         <div className="mt-[60px] flex space-x-2 justify-between">
-          <Button
-            onClick={() => {
-              if (props.onPrev) {
-                props.onPrev();
-              }
-              if (onPrev) {
-                onPrev();
-              }
-            }}
-            type="secondary"
-            disabled={!onPrev || props.disablePrev}
-          >
+          <Button onClick={onBackClick} type="secondary" disabled={!onPrev || props.disablePrev}>
             Previous
           </Button>
           <Button
-            onClick={async () => {
-              if (props.onNext) {
-                const success = props.onNext();
-                if (success === false) return;
-              }
-              if (pageValidate) {
-                setLoading(true);
-                const isValid = await pageValidate.validate(answers[question.key]);
-                setLoading(false);
-                if (!isValid) {
-                  setError(true);
-                  return;
-                }
-              }
-              if (onNext) {
-                onNext();
-              }
-            }}
+            onClick={onNextClick}
             wider
             type="primary"
             disabled={!onNext || !isValid || props.disableNext}
@@ -106,8 +120,6 @@ export function QuestionManager({
   );
 
   const answer = answers[question.key];
-
-  // const flashNull = useFlashNull(question.key);
 
   const content = (() => {
     if (question.type === 'text') {

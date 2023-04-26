@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { QuestionManager } from '~/components/QuestionManager';
 import { validation } from '~/components/QuestionManager/validation';
 import { QuizLayout } from '~/components/QuizLayout';
-import { ThankYou } from '~/components/ThankYou';
+import { ThankYou } from '~/pages/ThankYou';
 import { questions } from '~/quiz';
 import { useQuizStore } from '~/store/quiz';
 import { useQuery } from '~/utils/navigation';
@@ -37,7 +37,7 @@ export const QuizPage = () => {
 
   const onNext = () => {
     if (index >= filteredQuestions.length - 1) {
-      navigate({ search: `?k=thank_you` });
+      navigate('/thank-you', { replace: true });
       return false;
     } else {
       const newIndex = index + 1;

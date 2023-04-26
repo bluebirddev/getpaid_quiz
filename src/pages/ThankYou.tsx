@@ -1,6 +1,54 @@
-import { HomeLayout } from './HomeLayout';
+import { useQuizStore } from '~/store/quiz';
+import { HomeLayout } from '../components/HomeLayout';
+import { useEffect, useState } from 'react';
+import { GenericError } from '~/components/GenericError';
+import { QuizLayout } from '~/components/QuizLayout';
+import { PageLoader } from '~/components/PageLoader';
+import { postSubmissions } from '~/api';
+import { questions } from '~/quiz';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function hasAllQuestionsBeenAnswered(answers: Record<string, any>) {
+  return questions
+    .filter((q) => q.required && (!q.condition || q.condition(answers)))
+    .every((q) => answers[q.key] !== undefined);
+}
 
 export function ThankYou() {
+  const { answers } = useQuizStore();
+  const hasAnswered = hasAllQuestionsBeenAnswered(answers);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (hasAnswered) {
+      (async () => {
+        try {
+          await postSubmissions(answers);
+          setLoading(false);
+        } catch (e) {
+          setError(true);
+        }
+      })();
+    }
+  }, [hasAnswered]);
+
+  if (loading) {
+    return (
+      <QuizLayout progress={1}>
+        <PageLoader>Processing...</PageLoader>
+      </QuizLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <QuizLayout progress={1}>
+        <GenericError />
+      </QuizLayout>
+    );
+  }
+
   return (
     <HomeLayout>
       <div className="flex justify-center">
