@@ -28,9 +28,9 @@ export async function postSubmissions(submission: any) {
   }
 }
 
-export async function sendVerificationEmail(email: string) {
+export async function sendVerificationEmail(email: string, name: string) {
   try {
-    await api.post('/sendVerificationEmail', { email });
+    await api.post('/sendVerificationEmail', { email, name });
     return true;
   } catch (err) {
     return false;

@@ -80,7 +80,7 @@ export function QuestionManager({
         }
         if (pageValidate) {
           setLoading(true);
-          const isValid = await pageValidate.validate(answers[question.key]);
+          const isValid = await pageValidate.validate(answers[question.key], answers);
           setLoading(false);
           if (!isValid) {
             setError(true);

@@ -55,8 +55,8 @@ export const questions: Question[] = [
     pageValidate: {
       loadingText: 'Checking email',
       ErrorComponent: EmailError,
-      validate: async (email) => {
-        return await sendVerificationEmail(email);
+      validate: async (email, answers) => {
+        return await sendVerificationEmail(email, answers.first_name);
       },
     },
   },

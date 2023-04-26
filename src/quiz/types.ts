@@ -26,7 +26,7 @@ export type TelQuestion = BaseQuestion & {
   pageValidate?: {
     loadingText: string;
     ErrorComponent: (props: { onBack: () => void }) => JSX.Element;
-    validate: (tel: string) => Promise<boolean>;
+    validate: (tel: string, answers: any) => Promise<boolean>;
   };
 };
 export function isTelQuestion(question: Question): question is TelQuestion {
@@ -62,7 +62,7 @@ export type EmailQuestion = BaseQuestion & {
   pageValidate?: {
     loadingText: string;
     ErrorComponent: (props: { onBack: () => void }) => JSX.Element;
-    validate: (tel: string) => Promise<boolean>;
+    validate: (tel: string, answers: any) => Promise<boolean>;
   };
 };
 
