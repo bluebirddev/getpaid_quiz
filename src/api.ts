@@ -9,9 +9,9 @@ export const api = axios.create({
   },
 });
 
-export async function isTelAvailable(tel: string) {
+export async function isAvailable(params: { tel?: string; email?: string }) {
   try {
-    await api.get('/check?tel=' + tel);
+    await api.get('/check', { params });
     return true;
   } catch (err) {
     return false;
@@ -19,20 +19,6 @@ export async function isTelAvailable(tel: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function postSubmissions(submission: any) {
-  try {
-    await api.post('/submission', submission);
-    return true;
-  } catch (err) {
-    return false;
-  }
-}
-
-export async function sendVerificationEmail(email: string, name: string) {
-  try {
-    await api.post('/sendVerificationEmail', { email, name });
-    return true;
-  } catch (err) {
-    return false;
-  }
+export async function postSubmission(submission: any) {
+  await api.post('/submission', submission);
 }

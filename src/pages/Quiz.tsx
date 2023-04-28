@@ -8,6 +8,38 @@ import { questions } from '~/quiz';
 import { useQuizStore } from '~/store/quiz';
 import { useQuery } from '~/utils/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { postSubmission } from '~/api';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function hasAllQuestionsBeenAnswered(answers: Record<string, any>) {
+  return questions
+    .filter((q) => q.required && (!q.condition || q.condition(answers)))
+    .every((q) => answers[q.key] !== undefined);
+}
+
+function useSubmitting() {
+  const { answers } = useQuizStore();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  async function submit() {
+    setLoading(true);
+    try {
+      if (!hasAllQuestionsBeenAnswered(answers)) {
+        throw new Error('Not all questions have been answered');
+      }
+      await postSubmission(answers);
+      setSuccess(true);
+    } catch (e) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { submit, loading, error, success };
+}
 
 export const QuizPage = () => {
   const query = useQuery();
@@ -16,8 +48,10 @@ export const QuizPage = () => {
 
   const key = query.get('k');
 
-  if (key === 'thank_you') {
-    return <ThankYou />;
+  const { loading, error, success, submit } = useSubmitting();
+
+  if (success || loading || error) {
+    return <ThankYou loading={loading} error={error} />;
   }
 
   const filteredQuestions = questions.filter((q) => {
@@ -37,7 +71,8 @@ export const QuizPage = () => {
 
   const onNext = () => {
     if (index >= filteredQuestions.length - 1) {
-      navigate('/thank-you', { replace: true });
+      submit();
+      navigate('/quiz', { replace: true });
       return false;
     } else {
       const newIndex = index + 1;

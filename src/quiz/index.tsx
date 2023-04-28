@@ -1,8 +1,8 @@
 import { TelError } from '~/components/TelError';
 import { validateIdNumber } from '~/utils/validate_sa_id';
 import { Question } from './types';
-import { isTelAvailable, sendVerificationEmail } from '~/api';
 import { EmailError } from '~/components/EmailError';
+import { isAvailable } from '~/api';
 
 export const questions: Question[] = [
   {
@@ -43,7 +43,7 @@ export const questions: Question[] = [
       loadingText: 'Checking number',
       ErrorComponent: TelError,
       validate: async (tel) => {
-        return await isTelAvailable(tel);
+        return await isAvailable({ tel });
       },
     },
   },
@@ -55,8 +55,8 @@ export const questions: Question[] = [
     pageValidate: {
       loadingText: 'Checking email',
       ErrorComponent: EmailError,
-      validate: async (email, answers) => {
-        return await sendVerificationEmail(email, answers.first_name);
+      validate: async (email) => {
+        return await isAvailable({ email });
       },
     },
   },
