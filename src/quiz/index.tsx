@@ -61,17 +61,6 @@ export const questions: Question[] = [
     },
   },
   {
-    key: 'gender',
-    label: 'What is your gender?',
-    required: true,
-    type: 'select',
-    options: [
-      { value: 'male', label: 'Male' },
-      { value: 'female', label: 'Female' },
-      { value: 'other', label: 'Other' },
-    ],
-  },
-  {
     key: 'products',
     label: 'What products would you be interested',
     required: true,
@@ -604,6 +593,7 @@ export const questions: Question[] = [
   {
     key: 'twitter_handle',
     label: 'What is your Twitter handle?',
+    description: 'Optional',
     type: 'text',
     validate: (value) => {
       if (!value) return undefined;
@@ -667,7 +657,12 @@ export const questions: Question[] = [
         <br />
         <br />
         For full details of the privacy, processing and data policy to which you consent,{' '}
-        <a href="https://get-paid.co.za/privacy-cookie-policy/" target="_blank" rel="noreferrer">
+        <a
+          href="https://get-paid.co.za/privacy-cookie-policy/"
+          className="underline font-bold"
+          target="_blank"
+          rel="noreferrer"
+        >
           see here
         </a>
         .
@@ -697,6 +692,7 @@ export const questions: Question[] = [
   {
     key: 'anything_else',
     label: 'Anything else you would like us to know?',
+    description: 'Optional',
     type: 'text',
   },
 ];
