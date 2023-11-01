@@ -24,3 +24,6 @@ storybook-static
 *.sln
 *.sw?
 vite.config.ts.timestamp*
+
+# Firebase
+.firebase/
