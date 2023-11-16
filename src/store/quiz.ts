@@ -2,20 +2,20 @@
 import { create } from 'zustand';
 
 type StoreState = {
-  answers: Record<string, any>;
-  setAnswer: (key: string, answer: any) => void;
-  clearAnswers: () => void;
+    answers: Record<string, any>;
+    setAnswer: (key: string, answer: any) => void;
+    clearAnswers: () => void;
 };
 
 function getFromLocalStorage() {
-  const answers = localStorage.getItem('answers');
-  if (answers) {
-    return JSON.parse(answers);
-  }
-  return {};
+    const answers = localStorage.getItem('answers');
+    if (answers) {
+        return JSON.parse(answers);
+    }
+    return {};
 }
 function saveToLocalStorage(answers: Record<string, any>) {
-  localStorage.setItem('answers', JSON.stringify(answers));
+    localStorage.setItem('answers', JSON.stringify(answers));
 }
 
 /**
@@ -23,19 +23,19 @@ function saveToLocalStorage(answers: Record<string, any>) {
  * from react-query)
  */
 export const useQuizStore = create<StoreState>((set) => ({
-  answers: getFromLocalStorage(),
-  setAnswer: (key, answer) => {
-    return set((r) => {
-      const answers = { ...r.answers, [key]: answer };
-      saveToLocalStorage(answers);
-      return { answers };
-    });
-  },
-  clearAnswers: () => {
-    return set(() => {
-      const answers = {};
-      saveToLocalStorage(answers);
-      return { answers };
-    });
-  },
+    answers: getFromLocalStorage(),
+    setAnswer: (key, answer) => {
+        return set((r) => {
+            const answers = { ...r.answers, [key]: answer };
+            saveToLocalStorage(answers);
+            return { answers };
+        });
+    },
+    clearAnswers: () => {
+        return set(() => {
+            const answers = {};
+            saveToLocalStorage(answers);
+            return { answers };
+        });
+    },
 }));
