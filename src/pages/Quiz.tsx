@@ -9,6 +9,9 @@ import { useQuizStore } from '~/store/quiz';
 import { useQuery } from '~/utils/navigation';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { postSubmission } from '~/api';
+import { handlePageChange } from '~/analytics/handle_page_change';
+import { useSyncUserId, useUserIdStore } from '~/store/user_id';
+import { useQueryParamsStore } from '~/store/query_params';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function hasAllQuestionsBeenAnswered(answers: Record<string, any>) {
@@ -22,6 +25,9 @@ function useSubmitting() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const userId = useUserIdStore().userId!;
+    const { queryParams } = useQueryParamsStore();
 
     async function submit() {
         setLoading(true);
@@ -29,7 +35,7 @@ function useSubmitting() {
             if (!hasAllQuestionsBeenAnswered(answers)) {
                 throw new Error('Not all questions have been answered');
             }
-            await postSubmission(answers);
+            await postSubmission(userId, queryParams, answers);
             setSuccess(true);
         } catch (e) {
             setError(true);
@@ -45,6 +51,7 @@ export const QuizPage = () => {
     const query = useQuery();
     const navigate = useNavigate();
     const { answers } = useQuizStore();
+    useSyncUserId();
 
     const key = query.get('k');
 
@@ -75,6 +82,7 @@ export const QuizPage = () => {
             navigate('/quiz', { replace: true });
             return false;
         } else {
+            handlePageChange(filteredQuestions[index]);
             const newIndex = index + 1;
             navigate({ search: `?k=${filteredQuestions[newIndex].key}` });
             return true;

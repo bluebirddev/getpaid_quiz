@@ -631,21 +631,6 @@ export const questions: Question[] = [
         ],
     },
     {
-        key: 'have_referral_code',
-        label: 'Do you have a referral code?',
-        type: 'yes-no',
-        required: true,
-    },
-    {
-        key: 'referral_code',
-        label: 'If you have a referral code, enter it here',
-        type: 'text',
-        condition(answers) {
-            return !!answers.have_referral_code;
-        },
-        required: true,
-    },
-    {
         key: 'personal_info_consent',
         label: 'Consent',
         description: (

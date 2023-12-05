@@ -18,7 +18,16 @@ export async function isAvailable(params: { tel?: string; email?: string }) {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function postSubmission(submission: any) {
-    await api.post('/submission', submission);
+export async function postSubmission(
+    userId: string,
+    queryParams: Record<string, string>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    submission: any
+) {
+    await api.post('/submission', { ...submission, user_id: userId, referral_codes: queryParams });
+}
+
+export async function upsertUserId(userId: string | undefined): Promise<string> {
+    const res = await api.post(`/upsertUserId`, { user_id: userId });
+    return res.data;
 }

@@ -28,6 +28,5 @@ const luhnCheck = (num: string) => {
         0
     );
     sum += lastDigit;
-    console.log({ sum, lastDigit });
     return sum % 10 === 0;
 };
