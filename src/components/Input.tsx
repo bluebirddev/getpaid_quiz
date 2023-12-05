@@ -43,6 +43,7 @@ export function Input({
         const newValue: string = (() => {
             if (type === 'tel' || type === 'numeric') {
                 let val = e.target.value;
+                if (val && val.length === 1 && val !== '0') return realValue;
                 if (type === 'tel') {
                     val = e.target.value.replace(/ /g, '').slice(0, 10);
                 }

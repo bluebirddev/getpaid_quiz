@@ -25,7 +25,7 @@ export function Button({
             <button
                 className={classNames(
                     `
-        focus:ring-2 h-[45px] flex items-center justify-center focus:outline-none ring-[#D0D5DD] rounded-lg w-[300px] bg-white text-[#FC7B28] font-extrabold text-xl
+        focus:ring-2 h-[45px] flex items-center justify-center focus:outline-none ring-[#D0D5DD] rounded-lg w-full md:w-[300px] bg-white text-[#FC7B28] font-extrabold text-xl
       `
                 )}
                 disabled={disabled}
