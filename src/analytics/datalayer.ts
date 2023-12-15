@@ -11,9 +11,8 @@ export type Event = {
     // life_insurance?: string;
 };
 
-console.log(import.meta.env.DEV);
-
 export async function pushEvent(event: Event, data: Record<string, string> = {}) {
+    return;
     try {
         const obj = { ...event, ...data };
         console.log('GTM event: ', obj);

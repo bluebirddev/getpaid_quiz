@@ -25,8 +25,7 @@ function useSubmitting() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const userId = useUserIdStore().userId!;
+    const { userId, setUserId } = useUserIdStore();
     const { queryParams } = useQueryParamsStore();
 
     async function submit() {
@@ -35,11 +34,13 @@ function useSubmitting() {
             if (!hasAllQuestionsBeenAnswered(answers)) {
                 throw new Error('Not all questions have been answered');
             }
-            await postSubmission(userId, queryParams, answers);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            await postSubmission(userId!, queryParams, answers);
             setSuccess(true);
         } catch (e) {
             setError(true);
         } finally {
+            setUserId(undefined);
             setLoading(false);
         }
     }
